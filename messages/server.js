@@ -11,11 +11,14 @@ let messages = [
 const getAllMessages = (response) => {
   response.writeHead(200, { 'Content-Type': 'text/plain' });
   response.write(JSON.stringify(messages));
+  response.end();
 };
 
 const addMessage = (newMessage, response) => {
-  console.log("response", response);
-  return newMessage;
+  response.writeHead(201, { 'Content-Type': 'text/plain' });
+  response.write(JSON.stringify(newMessage));
+  response.end();
+  messages.push(newMessage);
 };
 
 server.listen(3000, () => {
@@ -24,7 +27,6 @@ server.listen(3000, () => {
 
 server.on("request", (request, response) => {
   if (request.method === "GET") {
-    console.log(response)
     getAllMessages(response)
 
   } else if (request.method === "POST") {
@@ -38,5 +40,4 @@ server.on("request", (request, response) => {
       addMessage(newMessage, response);
     });
   }
-  response.end();
 });
